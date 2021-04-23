@@ -14,7 +14,7 @@ SaaS companies use Visitorkit to understand their marketing campaigns, get advan
 
 Log into Wordpress
 
-1. [Download the Visitorkit plugin](https://github)
+1. [Download the Visitorkit plugin](https://github.com/Khabin/visitorkit-wordpress/releases/download/1.0.0/visitorkit-wp.zip)
 2. Go to `Plugins`, `Add New`
 3. Upload this plugin, `visitorkit-wp.zip`
 4. Click `Install Now`, then `Activate`
