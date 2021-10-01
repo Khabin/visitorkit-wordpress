@@ -1,8 +1,19 @@
-# Visitorkit for WordPress
+=== Visitorkit ===
+Contributors: visitorkit
+Donate link: https://visitorkit.com/
+Tags: website analytics, analytics, website stats
+Requires at least: 4.5
+Tested up to: 5.1
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires PHP: 5.3
 
-[Visitorkit](https://visitorkit.com) for WordPress is a simple way add your tracking code to your WordPress site without editing any code. This plugin is for customers of Visitorkit.
+Visitorkitfor WordPress is a simple way add your tracking code to your WordPress site without editing any code. This plugin is for customers of Visitorkit.
 
-![Screenshot of Visitorkit for Wordpress](screenshot-1.png)
+== Description ==
+
+A simple plugin to add the [Fathom Analytics](https://usefathom.com/) tracking snippet to your WordPress site and, optionally, displays
 
 ### What is Visitorkit?
 
@@ -10,9 +21,7 @@ Visitorkit is a marketing analytics platform that breaks the mold by focusing on
 
 SaaS companies use Visitorkit to understand their marketing campaigns, get advanced signals on customer behavior, and build products that convert.
 
-### Usage
-
-Log into Wordpress
+== Installation ==
 
 1. [Download the Visitorkit plugin](https://github.com/Khabin/visitorkit-wordpress/releases/download/1.0.0/visitorkit-wp.zip)
 2. Go to `Plugins`, `Add New`
@@ -20,3 +29,21 @@ Log into Wordpress
 4. Click `Install Now`, then `Activate`
 5. Go to `Settings`, then `Visitorkit Settings`
 6. Type in your `SITE-ID`. If you don’t know your `SITE-ID`, log into [Visitorkit](https://app.visitorkit.com)
+
+== Frequently Asked Questions ==
+
+#### Where can I find the plugin settings?
+
+This plugin has just a single settings field, which can be found by going to **WP Admin > Settings > General**.
+
+
+== Screenshots ==
+
+1. The settings field on the general settings page.
+
+
+== Changelog ==
+
+#### 1.0.0 - October 1, 2021
+
+Plugin release.
