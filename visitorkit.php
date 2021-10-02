@@ -5,6 +5,7 @@ Description: A simple plugin to add the Visitorkit tracking snippet to your Word
 Author: Visitorkit
 Author URI: https://visitorkit.com
 Version: 1.0.0
+License: GPL v2 or later
 Plugin URI: https://visitorkit.com/docs
 
 Visitorkit for WordPress
@@ -24,84 +25,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const VK_URL_OPTION_NAME = "visitorkit_url";
 const VK_SITE_ID_OPTION_NAME = "visitorkit_site_id";
-const VK_ADMIN_TRACKING_OPTION_NAME = "visitorkit_track_admin";
+const VK_PLUGIN_VERSION = '1.0.0';
 
 /**
  * @since 1.0.0
- */
-function visitorkit_get_url()
-{
-  $visitorkit_url = get_option(VK_URL_OPTION_NAME, "");
-
-  // don't print snippet if visitorkit URL is empty
-  if (empty($visitorkit_url)) {
-    return "cdn.usevisitorkit.com";
-  }
-
-  // trim trailing slash
-  $visitorkit_url = rtrim($visitorkit_url, "/");
-
-  // make relative
-  $visitorkit_url = str_replace(["https:", "http:"], "", $visitorkit_url);
-
-  return $visitorkit_url;
-}
-
-/**
- * @since 1.0.1
  */
 function visitorkit_get_site_id()
 {
   return get_option(VK_SITE_ID_OPTION_NAME, "");
-}
-
-/**
- * @since 1.0.1
- */
-function visitorkit_get_admin_tracking()
-{
-  return get_option(VK_ADMIN_TRACKING_OPTION_NAME, "");
-}
-
-/**
- * @since 1.0.0
- */
-function visitorkit_print_js_snippet()
-{
-  $url = visitorkit_get_url();
-  $exclude_admin = visitorkit_get_admin_tracking();
-
-  // don't print snippet if visitorkit URL is empty
-  if (empty($url)) {
-    return;
-  }
-
-  if (empty($exclude_admin) && current_user_can("manage_options")) {
-    return;
-  }
-
-  $site_id = visitorkit_get_site_id();
-
-  if (empty($site_id)) {
-    return;
-  }
-  ?>
-    
-    
-   <!-- Visitorkit - beautiful, simple website analytics -->
-   <script src="https://sdk.visitorkit.com/v1/<?php echo esc_attr($site_id); ?>"></script>
-   <!-- / Visitorkit -->
-   <?php
-}
-
-/**
- * @since 2.0.0
- */
-function visitorkit_stats_page()
-{
-  add_menu_page("Visitorkit", "edit_pages", "analytics", "visitorkit_print_stats_page", "dashicons-chart-bar", 6);
 }
 
 /**
@@ -110,7 +42,7 @@ function visitorkit_stats_page()
 function visitorkit_register_settings()
 {
   $visitorkit_logo_html = sprintf(
-    '<a href="https://usevisitorkit.com/" style="margin-left: 6px;"><img src="%s" width=20 height=20 style="vertical-align: bottom;"></a>',
+    '<a href="https://visitorkit.com/" style="margin-left: 6px;"><img src="%s" width=20 height=20 style="vertical-align: bottom;"></a>',
     plugins_url("visitorkit.png", __FILE__)
   );
 
@@ -126,7 +58,6 @@ function visitorkit_register_settings()
 
   // register options
   register_setting("visitorkit", VK_SITE_ID_OPTION_NAME, ["type" => "string"]);
-  register_setting("visitorkit", VK_ADMIN_TRACKING_OPTION_NAME, ["type" => "string"]);
 
   // register settings fields
   add_settings_field(
@@ -136,17 +67,10 @@ function visitorkit_register_settings()
     "visitorkit-analytics",
     "default"
   );
-  add_settings_field(
-    VK_ADMIN_TRACKING_OPTION_NAME,
-    __("Track Administrators", "visitorkit-analytics"),
-    "visitorkit_print_admin_tracking_setting_field",
-    "visitorkit-analytics",
-    "default"
-  );
 }
 
 /**
- * @since 1.0.1
+ * @since 1.0.0
  */
 function visitorkit_print_settings_page()
 {
@@ -160,12 +84,12 @@ function visitorkit_print_settings_page()
 }
 
 /**
- * @since 1.0.1
+ * @since 1.0.0
  */
 function visitorkit_print_site_id_setting_field($args = [])
 {
   $value = get_option(VK_SITE_ID_OPTION_NAME);
-  $placeholder = "ABCDEF";
+  $placeholder = "ABC123";
   echo sprintf(
     '<input type="text" name="%s" id="%s" class="regular-text" value="%s" placeholder="%s" />',
     VK_SITE_ID_OPTION_NAME,
@@ -182,24 +106,19 @@ function visitorkit_print_site_id_setting_field($args = [])
 }
 
 /**
- * @since 1.0.1
+ * @since 1.0.0
  */
-function visitorkit_print_admin_tracking_setting_field($args = [])
+function visitorkit_enqueue_script()
 {
-  $value = get_option(VK_ADMIN_TRACKING_OPTION_NAME);
-  echo sprintf(
-    '<input type="checkbox" name="%s" id="%s" value="1" %s />',
-    VK_ADMIN_TRACKING_OPTION_NAME,
-    VK_ADMIN_TRACKING_OPTION_NAME,
-    checked(1, $value, false)
-  );
-  echo '<p class="description">' .
-    __("Check if you want to track visits by administrators", "visitorkit-analytics") .
-    "</p>";
+  $site_id = visitorkit_get_site_id();
+  wp_enqueue_script( 'visitorkit', "https://sdk.visitorkit.com/v1/$site_id?wp", null, VK_PLUGIN_VERSION, true );
+  
 }
 
-add_action("wp_footer", "visitorkit_print_js_snippet", 50);
+// Add Visitorkit to Footer
+add_action("wp_enqueue_scripts", "visitorkit_enqueue_script");
 
+// Enable Settings
 if (is_admin() && !wp_doing_ajax()) {
   add_action("admin_menu", "visitorkit_register_settings");
 }
